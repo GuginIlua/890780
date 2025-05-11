@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Пример Vue.js</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        .todo-item {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>Список дел</h1>
+
+        <input type="text" v-model="newTodo" placeholder="Добавить дело">
+        <button @click="addTodo">Добавить</button>
+
+        <ul>
+            <li v-for="(todo, index) in todos" :key="index" class="todo-item" :class="{ completed: todo.completed }">
+                <div>
+                    <input type="checkbox" v-model="todo.completed">
+                    <span :class="{ completed: todo.completed }">{{ todo.text }}</span>
+                </div>
+                <button @click="removeTodo(index)">Удалить</button>
+            </li>
+        </ul>
+
+        <p v-if="todos.length === 0">Список дел пуст.</p>
+        <p>Всего дел: {{ todos.length }}</p>
+    </div>
+
+    <script>
+    const { createApp } = Vue
+
+    createApp({
+        data() {
+            return {
+                newTodo: '',
+                todos: [
+                    { text: 'Купить молоко', completed: false },
+                    { text: 'Забрать вещи из химчистки', completed: false },
+                    { text: 'Позвонить врачу', completed: true },
+                    { text: 'Написать отчет', completed: false },
+                    { text: 'Прочитать книгу', completed: false },
+                    { text: 'Заплатить за интернет', completed: false },
+                    { text: 'Выгулять собаку', completed: true },
+                    { text: 'Приготовить ужин', completed: false },
+                    { text: 'Сходить в спортзал', completed: false },
+                    { text: 'Посмотреть фильм', completed: false }
+                ]
+            }
+        },
+        methods: {
+            addTodo() {
+                if (this.newTodo.trim() !== '') {
+                    this.todos.push({ text: this.newTodo, completed: false });
+                    this.newTodo = '';
+                }
+            },
+            removeTodo(index) {
+                this.todos.splice(index, 1);
+            }
+        }
+    }).mount('#app')
+    </script>
+</body>
+</html>
